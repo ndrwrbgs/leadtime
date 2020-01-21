@@ -74,9 +74,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LeadTime.Library\LeadTime.Library.csproj">
+    <ProjectReference Include="..\LeadTime.Library\LeadTime.Core.csproj">
       <Project>{A47ACB23-5710-4FB1-8317-8D26A32997D3}</Project>
-      <Name>LeadTime.Library</Name>
+      <Name>LeadTime.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

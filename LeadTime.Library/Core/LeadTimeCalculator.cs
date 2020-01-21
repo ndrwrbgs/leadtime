@@ -1,11 +1,12 @@
 ﻿
-namespace LeadTime.Library
+namespace LeadTime.Library.Core
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+
+    using LeadTime.Library.Core.DataTypes;
+    using LeadTime.Library.Core.Util;
 
     /// <summary>
     /// 
@@ -17,30 +18,43 @@ namespace LeadTime.Library
             TimeSpan rangeDuration,
             DateTimeOffset snapDateRangesTo)
         {
+            var leadTimes = GetLeadTimes(inAndOutDates);
+
+            var dateRangeLeadTimes = GroupOverTimeRanges(leadTimes, rangeDuration, snapDateRangesTo);
+
+            var dateRangeHistograms = dateRangeLeadTimes.ToDictionary(o => o.dateRange, o => (IHistogram<TimeSpan>)new TimeSpanHistogram(o.leadTimesInRange));
+
+            return dateRangeHistograms;
+        }
+
+        private static IEnumerable<(DateTimeOffset outDate, TimeSpan leadTime)> GetLeadTimes(
+            IEnumerable<(DateTimeOffset inDate, DateTimeOffset outDate)> inAndOutDates)
+        {
+            return inAndOutDates
+                .Select(o => (o.outDate, o.outDate - o.inDate));
+        }
+
+        private static IEnumerable<(DateRange dateRange, List<TimeSpan> leadTimesInRange)> GroupOverTimeRanges(
+            IEnumerable<(DateTimeOffset outDate, TimeSpan leadTime)> leadTimes,
+            TimeSpan rangeDuration,
+            DateTimeOffset snapDateRangesTo)
+        {
             var snappedToOutDates = ToDateRange.SnapToDateRanges(
-                inAndOutDates,
+                leadTimes,
                 o => o.outDate,
                 snapDateRangesTo,
                 rangeDuration);
 
-            var dateRangeHistograms = snappedToOutDates
+            return snappedToOutDates
                 .Select(
                     kvp =>
                     {
                         var dateRange = kvp.Key;
-                        var inAndOutDatesInRange = kvp.Value;
+                        var leadTimesWithDatesInRange = kvp.Value;
 
-                        var durations = inAndOutDatesInRange.Select(o => o.outDate - o.inDate).ToList();
-                        var histogram = new TimeSpanHistogram(durations);
-                        return new
-                        {
-                            dateRange,
-                            histogram
-                        };
-                    })
-                .ToDictionary(o => o.dateRange, o => (IHistogram<TimeSpan>)o.histogram);
-
-            return dateRangeHistograms;
+                        var leadTimesInRange = leadTimesWithDatesInRange.Select(o => o.leadTime).ToList();
+                        return (dateRange, leadTimesInRange);
+                    });
         }
     }
 }

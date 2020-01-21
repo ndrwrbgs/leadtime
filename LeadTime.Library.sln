@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29424.173
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeadTime.Library", "LeadTime.Library\LeadTime.Library.csproj", "{A47ACB23-5710-4FB1-8317-8D26A32997D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeadTime.Core", "LeadTime.Library\LeadTime.Core.csproj", "{A47ACB23-5710-4FB1-8317-8D26A32997D3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeadTimes.Test", "LeadTimes.Test\LeadTimes.Test.csproj", "{FEC6C29E-A7BE-4FF6-A7FE-B6874D1158F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeadTime.Git", "LeadTime.Git\LeadTime.Git.csproj", "{50B74543-E4B9-4CA8-946A-EFC19C09053F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{FEC6C29E-A7BE-4FF6-A7FE-B6874D1158F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FEC6C29E-A7BE-4FF6-A7FE-B6874D1158F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FEC6C29E-A7BE-4FF6-A7FE-B6874D1158F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50B74543-E4B9-4CA8-946A-EFC19C09053F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50B74543-E4B9-4CA8-946A-EFC19C09053F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50B74543-E4B9-4CA8-946A-EFC19C09053F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50B74543-E4B9-4CA8-946A-EFC19C09053F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

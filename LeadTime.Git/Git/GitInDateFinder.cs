@@ -2,6 +2,8 @@
     using System;
     using System.Collections.Generic;
 
+    using LeadTime.Library.Git.DataTypes;
+
     using LibGit2Sharp;
 
     internal static class GitInDateFinder

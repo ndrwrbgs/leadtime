@@ -1,4 +1,4 @@
-﻿namespace LeadTime.Library {
+﻿namespace LeadTime.Library.Core.DataTypes {
     using System;
     using System.Collections.Generic;
 

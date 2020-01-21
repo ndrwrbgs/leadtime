@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A47ACB23-5710-4FB1-8317-8D26A32997D3}</ProjectGuid>
+    <ProjectGuid>{50B74543-E4B9-4CA8-946A-EFC19C09053F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LeadTime.Library</RootNamespace>
-    <AssemblyName>LeadTime.Library</AssemblyName>
+    <RootNamespace>LeadTime.Git</RootNamespace>
+    <AssemblyName>LeadTime.Git</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -50,25 +50,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\DataTypes\DateRange.cs" />
-    <Compile Include="Core\DataTypes\TimeSpanHistogram.cs" />
-    <Compile Include="Core\DataTypes\IHistogram.cs" />
-    <Compile Include="Core\DataTypes\Percentile.cs" />
-    <Compile Include="Core\LeadTimeCalculator.cs" />
-    <Compile Include="Core\Util\TimeSpanUtil.cs" />
-    <Compile Include="Git\GitChangesBetweenLister.cs" />
     <Compile Include="Git\DataTypes\GitCommitHash.cs" />
+    <Compile Include="Git\GitChangesBetweenLister.cs" />
     <Compile Include="Git\GitInAndOutDateFinder.cs" />
     <Compile Include="Git\GitInDateFinder.cs" />
     <Compile Include="Git\GitLeadTimeCalculator.cs" />
     <Compile Include="Git\GitOutDateFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Core\Util\ToDateRange.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\LeadTime.Library\LeadTime.Core.csproj">
+      <Project>{A47ACB23-5710-4FB1-8317-8D26A32997D3}</Project>
+      <Name>LeadTime.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

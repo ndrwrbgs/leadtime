@@ -1,5 +1,5 @@
 ﻿
-namespace LeadTime.Library
+namespace LeadTime.Library.Core.DataTypes
 {
     using System;
 
@@ -19,7 +19,7 @@ namespace LeadTime.Library
 
         public override bool Equals(object obj)
         {
-            return obj is DateRange other && Equals(other);
+            return obj is DateRange other && this.Equals(other);
         }
 
         public override int GetHashCode()
@@ -56,8 +56,8 @@ namespace LeadTime.Library
 
         public bool Contains(DateTimeOffset date)
         {
-            return date >= StartInclusive
-                   && date < EndExclusive;
+            return date >= this.StartInclusive
+                   && date < this.EndExclusive;
         }
 
         public int CompareTo(DateRange other)
@@ -78,7 +78,7 @@ namespace LeadTime.Library
                 return 1;
             }
 
-            return obj is DateRange other ? CompareTo(other) : throw new ArgumentException($"Object must be of type {nameof(DateRange)}");
+            return obj is DateRange other ? this.CompareTo(other) : throw new ArgumentException($"Object must be of type {nameof(DateRange)}");
         }
 
         public static bool operator <(DateRange left, DateRange right)

@@ -7,7 +7,10 @@ namespace LeadTimes.Test
     using System.Linq;
 
     using LeadTime.Library;
+    using LeadTime.Library.Core.DataTypes;
+    using LeadTime.Library.Core.Util;
     using LeadTime.Library.Git;
+    using LeadTime.Library.Git.DataTypes;
 
     using LibGit2Sharp;
 

@@ -2,6 +2,10 @@
     using System;
     using System.Collections.Generic;
 
+    using LeadTime.Library.Core;
+    using LeadTime.Library.Core.DataTypes;
+    using LeadTime.Library.Git.DataTypes;
+
     using LibGit2Sharp;
 
     public static class GitLeadTimeCalculator

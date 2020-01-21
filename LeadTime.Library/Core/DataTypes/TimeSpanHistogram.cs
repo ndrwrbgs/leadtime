@@ -1,11 +1,9 @@
-﻿namespace LeadTime.Library
+﻿namespace LeadTime.Library.Core.DataTypes
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// 
@@ -37,19 +35,19 @@
             // TODO: This is just working around BUUUUGS
             if (percentile == 1.00)
             {
-                return values.Last();
+                return this.values.Last();
             }
 
             // TODO: Look up what is considered 'standard' for interpolating percentiles
-            var lower = (int)Math.Floor(percentile * values.Count);
-            var upper = (int)Math.Ceiling(percentile * values.Count);
+            var lower = (int)Math.Floor(percentile * this.values.Count);
+            var upper = (int)Math.Ceiling(percentile * this.values.Count);
 
-            return values[lower];
+            return this.values[lower];
         }
 
         public override string ToString()
         {
-            return $"[{GetPercentile(0)} - {GetPercentile(0.50)} - {GetPercentile(1.00)}]";
+            return $"[{this.GetPercentile(0)} - {this.GetPercentile(0.50)} - {this.GetPercentile(1.00)}]";
         }
     }
 }

@@ -6,6 +6,8 @@ namespace LeadTime.Library.Git
     using System.Collections.Generic;
     using System.Linq;
 
+    using LeadTime.Library.Git.DataTypes;
+
     internal static class GitInAndOutDateFinder
     {
         public static IEnumerable<(DateTimeOffset inDate, DateTimeOffset outDate)> GetInAndOutDates(

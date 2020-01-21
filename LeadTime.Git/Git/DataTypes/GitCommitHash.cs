@@ -1,5 +1,5 @@
 ﻿
-namespace LeadTime.Library.Git {
+namespace LeadTime.Library.Git.DataTypes {
     using System;
     using System.Text.RegularExpressions;
 
@@ -18,7 +18,7 @@ namespace LeadTime.Library.Git {
 
         public override bool Equals(object obj)
         {
-            return obj is GitCommitHash other && Equals(other);
+            return obj is GitCommitHash other && this.Equals(other);
         }
 
         public override int GetHashCode()

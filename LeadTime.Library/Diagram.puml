@@ -1,0 +1,56 @@
+@startuml LeadTime Workflow
+
+title GitLeadTimeCalculator.Calculate()
+
+left to right direction
+
+cloud Git as git
+cloud Ship as ship
+
+package "GitInAndOutDateFinder.GetInAndOutDates()" as P1 #Turquoise {
+    component "Enumerate\rin-between changes" as listAll
+    note bottom of listAll
+     GitChangesBetweenLister.
+     EnumerateWithAnyChangesBetween()
+    end note
+    git --> listAll
+    ship --> listAll
+
+    component "Collect\rcheck-in dates" as inDates
+    note bottom of inDates
+     GitInDateFinder.
+     GetInDates()
+    end note
+    git --> inDates
+    listAll --> inDates
+
+    component "Collect\rship dates" as outDates
+    note top of outDates
+     GitOutDateFinder.
+     GetOutDates()
+    end note
+    listAll --> outDates
+    ship --> outDates
+
+    component "In & out dates\rby change" as combine
+    inDates --> combine
+    outDates --> combine
+}
+
+package "LeadTimeCalculator.GetInDates() (in LeadTimes.Core)" {
+    component "Compute\rlead times" as leadTimes
+    note top of leadTimes : .GetLeadTimes()
+    combine --> leadTimes : "(DateTime, DateTime)[]"
+
+    component "Group over\rtime ranges" as groupRange
+    note top of groupRange : .GroupOverTimeRanges()
+    leadTimes --> groupRange
+
+    component "Create\rhistograms" as histogram
+    groupRange --> histogram
+}
+
+
+histogram --> (out) : "(DateRange->Histogram)[]"
+
+@enduml

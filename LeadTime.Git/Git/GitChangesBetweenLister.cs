@@ -9,6 +9,8 @@ namespace LeadTime.Library.Git
     using System.Text;
     using System.Threading.Tasks;
 
+    using LeadTime.Library.Git.DataTypes;
+
     /// <summary>
     /// WARNING this was designed for repos that enforce squash-commits (as opposed to merge commits)
     /// </summary>

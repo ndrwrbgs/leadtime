@@ -1,4 +1,4 @@
-﻿namespace LeadTime.Library {
+﻿namespace LeadTime.Library.Core.Util {
     using System;
 
     internal static class TimeSpanUtil

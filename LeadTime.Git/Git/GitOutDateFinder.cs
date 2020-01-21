@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using LeadTime.Library.Git.DataTypes;
+
     /// <summary>
     /// TODO: Should handle 'rollbacks' where we ship 0,1,2 then go BACK to 1, and ship 2,3 later
     /// (2 should be attributed to the later ship date)
