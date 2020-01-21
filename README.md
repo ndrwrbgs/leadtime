@@ -36,5 +36,5 @@ using (var repository = new Repository(@"c:\MyRepositoryPath")) // From LibGit2S
 ```
 
 # Implementation details
-Specially if you're trying to modify/reuse the code for non-git purposes or otherwise extend it, it's useful to have a diagram...
+Especially if you're trying to modify/reuse the code for non-git purposes or otherwise extend it, it's useful to have a diagram...
 ![image](/LeadTime.Library/Diagram/LeadTime%20Workflow.png)
