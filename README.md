@@ -1,5 +1,5 @@
 # LeadTime
-Evaluate the lead time of changes - targeted specifically at git commit lead times from commit to deployment time.
+Evaluate the [lead time](https://en.wikipedia.org/wiki/Lead_time) of changes - targeted specifically at git commit lead times from commit to deployment time.
 
 # Usage
 ## You supply
@@ -16,7 +16,7 @@ You supply:
 ## We do
 The library handles finding all the changes in between those, collecting them into _groups_ of changes deployed on each date, figuring out when each change was committed and how long it had been between commit and deployment, and creating histograms for each day/week/month.
 
-## Example
+## Code
 ```C#
 using (var repository = new Repository(@"c:\MyRepositoryPath")) // From LibGit2Sharp
 {
@@ -34,3 +34,6 @@ using (var repository = new Repository(@"c:\MyRepositoryPath")) // From LibGit2S
         repository);
 }
 ```
+
+## How
+![image](/LeadTime.Library/Diagram/LeadTime%20Workflow.png)
