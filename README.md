@@ -1,4 +1,7 @@
 # LeadTime
+
+![Icon](/package_icon.png)
+
 Evaluate the [lead time](https://en.wikipedia.org/wiki/Lead_time) of changes - targeted specifically at git commit lead times from commit to deployment time.
 
 # Usage
@@ -38,3 +41,7 @@ using (var repository = new Repository(@"c:\MyRepositoryPath")) // From LibGit2S
 # Implementation details
 Especially if you're trying to modify/reuse the code for non-git purposes or otherwise extend it, it's useful to have a diagram...
 ![image](/LeadTime.Library/Diagram/LeadTime%20Workflow.png)
+
+## Icon
+
+[duration](https://thenounproject.com/term/duration/2329742) designed by [Goh H Chin](https://thenounproject.com/gohhchin) from [The Noun Project](https://thenounproject.com).
