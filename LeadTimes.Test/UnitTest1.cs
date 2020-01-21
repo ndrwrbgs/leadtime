@@ -7,6 +7,9 @@ namespace LeadTimes.Test
     using System.Linq;
 
     using LeadTime.Library;
+    using LeadTime.Library.Git;
+
+    using LibGit2Sharp;
 
     using NSubstitute;
 
@@ -14,44 +17,116 @@ namespace LeadTimes.Test
     public class UnitTest1
     {
         [TestMethod]
-        public void TestMethod1()
+        public void HistogramTest()
         {
-            IStartTimeSupplier<string> startTimeSupplier = Substitute.For<IStartTimeSupplier<string>>();
-            IShipTimeSupplier<string> shipTimeSupplier = Substitute.For<IShipTimeSupplier<string>>();
+            var histogram = new TimeSpanHistogram(
+                new TimeSpan[]
+                {
+                    TimeSpan.Zero,
+                    TimeSpan.MaxValue
+                });
 
-            DateTimeOffset shipTime = DateTimeOffset.Parse("1/2/2019");
-            TimeSpan expectedLeadTime = TimeSpan.FromDays(1);
+            Assert.AreEqual(TimeSpan.Zero, histogram.GetPercentile(0));
+            Assert.AreEqual(TimeSpan.MaxValue, histogram.GetPercentile(1));
+        }
 
-            startTimeSupplier
-                .GetAllItemStartTimes()
-                .Returns(
-                    (IReadOnlyDictionary<string, DateTimeOffset>)(new Dictionary<string, DateTimeOffset>
-                    {
-                        ["a"] = shipTime - expectedLeadTime
-                    }));
-            shipTimeSupplier
-                .GetAllItemShipTimes()
-                .Returns(
-                    (IReadOnlyDictionary<string, DateTimeOffset>)(new Dictionary<string, DateTimeOffset>
-                    {
-                        ["a"] = shipTime
-                    }));
+        [TestClass]
+        public class DateSnapTests
+        {
+            [TestMethod]
+            public void Nominal()
+            {
+                var snapped = ToDateRange.SnapToDateRanges(
+                    new[] {DateTimeOffset.Parse("1/18/2020")},
+                    o => o,
+                    DateTimeOffset.Parse("1/16/2020"),
+                    TimeSpan.FromDays(7))
+                    .Keys
+                    .Single();
 
-            var results = LeadTimeCalculator.Calculate<string>(
-                startTimeSupplier,
-                shipTimeSupplier);
+                Assert.AreEqual(DateTimeOffset.Parse("1/16/2020"), snapped.StartInclusive);
+                Assert.AreEqual(DateTimeOffset.Parse("1/23/2020"), snapped.EndExclusive);
+            }
 
-            Assert.AreEqual(1, results.LeadTimes.Count, "one input");
-            var one = results.LeadTimes.Single();
-            Assert.AreEqual(1, one.Value.Count, "one input");
+            [TestMethod]
+            public void OverlapsStart()
+            {
+                var snapped = ToDateRange.SnapToDateRanges(
+                        new[] { DateTimeOffset.Parse("1/18/2020") },
+                        o => o,
+                        DateTimeOffset.Parse("1/18/2020"),
+                        TimeSpan.FromDays(7))
+                    .Keys
+                    .Single();
 
-            // Due to the 'bad math' we cannot assert the day to be 1/2, but only to include it
-            // The ship time falls within the 'week' of the result
-            Assert.IsTrue(one.Key <= shipTime);
-            Assert.IsTrue(one.Key + TimeSpan.FromDays(7) >= shipTime);
+                Assert.AreEqual(DateTimeOffset.Parse("1/18/2020"), snapped.StartInclusive);
+                Assert.AreEqual(DateTimeOffset.Parse("1/25/2020"), snapped.EndExclusive);
+            }
 
-            // Correct lead time difference
-            Assert.AreEqual(expectedLeadTime, one.Value.Single());
+            [TestMethod]
+            public void OverlapsEnd()
+            {
+                var snapped = ToDateRange.SnapToDateRanges(
+                        new[] { DateTimeOffset.Parse("1/18/2020") },
+                        o => o,
+                        DateTimeOffset.Parse("1/11/2020"),
+                        TimeSpan.FromDays(7))
+                    .Keys
+                    .Single();
+
+                Assert.AreEqual(DateTimeOffset.Parse("1/18/2020"), snapped.StartInclusive);
+                Assert.AreEqual(DateTimeOffset.Parse("1/25/2020"), snapped.EndExclusive);
+            }
+
+            [TestMethod]
+            public void ManualTestOfAMonthDuration()
+            {
+                var snapped = ToDateRange.SnapToDateRanges(
+                        new[] { DateTimeOffset.Parse("10/18/2020") },
+                        o => o,
+                        DateTimeOffset.Parse("1/1/1990"),
+                        // Accounts for leap years
+                        TimeSpan.FromDays(30.4375))
+                    .Keys
+                    .Single();
+            }
+
+            [TestMethod]
+            public void MuchFarBefore()
+            {
+                var snapped = ToDateRange.SnapToDateRanges(
+                        new[] { DateTimeOffset.Parse("1/18/2020") },
+                        o => o,
+                        // A Monday
+                        DateTimeOffset.Parse("2/9/1920"),
+                        TimeSpan.FromDays(7))
+                    .Keys
+                    .Single();
+
+                Assert.AreEqual(DateTimeOffset.Parse("1/13/2020"), snapped.StartInclusive);
+                Assert.AreEqual(DateTimeOffset.Parse("1/20/2020"), snapped.EndExclusive);
+            }
+        }
+
+        [TestClass]
+        public class GitTests
+        {
+            [TestMethod]
+            public void ManualTesting()
+            {
+                using (var repository = new Repository(@"c:\RAMDisk\Health"))
+                {
+                    var all = GitLeadTimeCalculator.Calculate(
+                        new[]
+                        {
+                            ((GitCommitHash) "ff59565f369f137b5458200ddb04a73ee96e1623", DateTimeOffset.Now.AddDays(-1)),
+                            ((GitCommitHash) "0fd7d90c9533194382b6d3c98aaf4204c82de12a", DateTimeOffset.Now),
+                        },
+                        TimeSpan.FromDays(1),
+                        DateTimeOffset.Now.Date,
+                        repository);
+                }
+            }
         }
     }
 }
