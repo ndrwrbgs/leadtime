@@ -25,6 +25,7 @@ steps:
   inputs:
     command: 'build'
     projects: '$(solution)'
+    arguments: '--no-restore'
 
 - task: VSTest@2
   inputs:
