@@ -5,6 +5,9 @@ namespace LeadTime.Library.Core
     using System.Collections.Generic;
     using System.Linq;
 
+    using Accord.Statistics.Distributions;
+    using Accord.Statistics.Distributions.Fitting;
+    using Accord.Statistics.Distributions.Univariate;
     using LeadTime.Library.Core.DataTypes;
     using LeadTime.Library.Core.Util;
 
@@ -13,7 +16,7 @@ namespace LeadTime.Library.Core
     /// </summary>
     public static class LeadTimeCalculator
     {
-        public static IDictionary<DateRange, IHistogram<TimeSpan>> Calculate(
+        public static IDictionary<DateRange, IUnivariateDistribution> Calculate(
             IEnumerable<(DateTimeOffset inDate, DateTimeOffset outDate)> inAndOutDates,
             TimeSpan rangeDuration,
             DateTimeOffset snapDateRangesTo)
@@ -22,9 +25,26 @@ namespace LeadTime.Library.Core
 
             var dateRangeLeadTimes = GroupOverTimeRanges(leadTimes, rangeDuration, snapDateRangesTo);
 
-            var dateRangeHistograms = dateRangeLeadTimes.ToDictionary(o => o.dateRange, o => (IHistogram<TimeSpan>)new TimeSpanHistogram(o.leadTimesInRange));
+            var dateRangeDistributions = dateRangeLeadTimes.ToDictionary(
+                o => o.dateRange,
+                o =>
+                {
+                    var normal = new NormalDistribution();
 
-            return dateRangeHistograms;
+                    normal.Fit(
+                        o.leadTimesInRange.Select(t => (double)t.Ticks).ToArray(),
+                        new NormalOptions
+                        {
+                            Regularization = 1e-6
+                        });
+
+                    //var normal = new EmpiricalDistribution(
+                    //    o.leadTimesInRange.Select(t => (double) t.Ticks).ToArray());
+
+                    return (IUnivariateDistribution)normal;
+                });
+
+            return dateRangeDistributions;
         }
 
         private static IEnumerable<(DateTimeOffset outDate, TimeSpan leadTime)> GetLeadTimes(

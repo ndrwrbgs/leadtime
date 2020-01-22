@@ -2,6 +2,9 @@
     using System;
     using System.Collections.Generic;
 
+    using Accord.Statistics.Distributions;
+    using Accord.Statistics.Distributions.Univariate;
+
     using LeadTime.Library.Core;
     using LeadTime.Library.Core.DataTypes;
     using LeadTime.Library.Git.DataTypes;
@@ -10,7 +13,7 @@
 
     public static class GitLeadTimeCalculator
     {
-        public static IDictionary<DateRange, IHistogram<TimeSpan>> Calculate(
+        public static IDictionary<DateRange, IUnivariateDistribution> Calculate(
             IEnumerable<(GitCommitHash changeHash, DateTimeOffset shipDate)> individuallyShippedChanges,
             TimeSpan rangeDuration,
             DateTimeOffset snapDateRangesTo,
