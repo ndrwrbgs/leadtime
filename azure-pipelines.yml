@@ -21,11 +21,12 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-- task: DotNetCoreCLI@2
+- task: VSBuild@1
   inputs:
-    command: 'build'
-    projects: '$(solution)'
-    arguments: '--no-restore'
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    msbuildArchitecture: 'x64'
 
 - task: VSTest@2
   inputs:
@@ -34,7 +35,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
-    Contents: '**/*.nupkg'
+    Contents: '**/bin/**/*.nupkg'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
