@@ -9,8 +9,8 @@
     <PackageIconUrl>https://github.com/ndrwrbgs/leadtime/blob/master/package_icon.png</PackageIconUrl>
     <PackageIcon>package_icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/ndrwrbgs/leadtime</RepositoryUrl>
-    <Version>1.0.2</Version>
-    <PackageReleaseNotes>bump version to test azure pipeline</PackageReleaseNotes>
+    <Version>1.0.3</Version>
+    <PackageReleaseNotes>bump version to test azure pipeline again</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
