@@ -38,6 +38,16 @@ using (var repository = new Repository(@"c:\MyRepositoryPath")) // From LibGit2S
         // In this example, just telling it to snap to days (by using .Date to drop the time part) DateTimeOffset.Parse("01/01/2001") would be a good value as well and if I make any wrapping libraries, will likely be the default
         DateTimeOffset.Now.Date,
         repository);
+    
+    var orderedDateRanges = all.OrderBy(kvp => kvp.Key);
+    foreach (var dateRangeAndHistogram in orderedDateRanges)
+    {
+        var dateRange = dateRangeAndHistogram.Key;
+        var histogram = dateRangeAndHistogram.Value;
+
+        // // [1/21/2020 12:00:00 AM +00:00, 1/22/2020 12:00:00 AM +00:00): [11.16:13:19.7169758 - 11.16:13:19.7169758 - 11.16:13:19.7169758]
+        Console.WriteLine($"{dateRange}: {histogram}");
+    }
 }
 ```
 

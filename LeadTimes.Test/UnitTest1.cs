@@ -128,6 +128,16 @@ namespace LeadTimes.Test
                         TimeSpan.FromDays(1),
                         DateTimeOffset.Now.Date,
                         repository);
+
+                    var orderedDateRanges = all.OrderBy(kvp => kvp.Key);
+                    foreach (var dateRangeAndHistogram in orderedDateRanges)
+                    {
+                        var dateRange = dateRangeAndHistogram.Key;
+                        var histogram = dateRangeAndHistogram.Value;
+
+                        // // [1/21/2020 12:00:00 AM +00:00, 1/22/2020 12:00:00 AM +00:00): [11.16:13:19.7169758 - 11.16:13:19.7169758 - 11.16:13:19.7169758]
+                        Console.WriteLine($"{dateRange}: {histogram}");
+                    }
                 }
             }
         }
