@@ -78,7 +78,7 @@
       <Project>{50B74543-E4B9-4CA8-946A-EFC19C09053F}</Project>
       <Name>LeadTime.Git</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LeadTime.Library\LeadTime.Core.csproj">
+    <ProjectReference Include="..\LeadTime.Core\LeadTime.Core.csproj">
       <Project>{A47ACB23-5710-4FB1-8317-8D26A32997D3}</Project>
       <Name>LeadTime.Core</Name>
     </ProjectReference>

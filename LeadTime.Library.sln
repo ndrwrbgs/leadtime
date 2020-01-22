@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29424.173
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeadTime.Core", "LeadTime.Library\LeadTime.Core.csproj", "{A47ACB23-5710-4FB1-8317-8D26A32997D3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeadTime.Core", "LeadTime.Core\LeadTime.Core.csproj", "{A47ACB23-5710-4FB1-8317-8D26A32997D3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeadTimes.Test", "LeadTimes.Test\LeadTimes.Test.csproj", "{FEC6C29E-A7BE-4FF6-A7FE-B6874D1158F1}"
 EndProject
