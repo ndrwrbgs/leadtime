@@ -115,6 +115,7 @@ namespace LeadTimes.Test
         public class GitTests
         {
             [TestMethod]
+            [Ignore("Dev box only")]
             public void ManualTesting()
             {
                 using (var repository = new Repository(@"c:\RAMDisk\Health"))
