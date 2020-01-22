@@ -1,6 +1,8 @@
 [![nuget](https://img.shields.io/nuget/v/LeadTime.Core.svg?label=LeadTime.Core&logo=nuget)](https://www.nuget.org/packages/LeadTime.Core)
 [![nuget](https://img.shields.io/nuget/v/LeadTime.Git.svg?label=LeadTime.Git&logo=nuget)](https://www.nuget.org/packages/LeadTime.Git)
 
+[![Build Status](https://dev.azure.com/ndrwrbgs-github/github/_apis/build/status/ndrwrbgs.leadtime?branchName=master)](https://dev.azure.com/ndrwrbgs-github/github/_build/latest?definitionId=1&branchName=master)
+
 # LeadTime
 
 ![Icon](/package_icon.png)
