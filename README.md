@@ -1,4 +1,5 @@
-[![nuget](https://img.shields.io/nuget/LeadTime.Core.svg)]
+[![nuget](https://img.shields.io/nuget/v/LeadTime.Core.svg?label=LeadTime.Core&logo=nuget)](https://www.nuget.org/packages/LeadTime.Core)
+[![nuget](https://img.shields.io/nuget/v/LeadTime.Git.svg?label=LeadTime.Git&logo=nuget)](https://www.nuget.org/packages/LeadTime.Git)
 
 # LeadTime
 
