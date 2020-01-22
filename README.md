@@ -1,3 +1,5 @@
+[![nuget](https://img.shields.io/nuget/LeadTime.Core.svg)]
+
 # LeadTime
 
 ![Icon](/package_icon.png)
@@ -28,7 +30,7 @@ using (var repository = new Repository(@"c:\MyRepositoryPath")) // From LibGit2S
         {
             // From your deployment history
             ((GitCommitHash) "00000000000000000000000000000000deadbeef", DateTimeOffset.Parse("01/01/2010")),
-            ((GitCommitHash) "000000000000000000000000000000000badfeed", DateTimeOffset.Parse("01/10/2010")),
+            ((GitCommitHash) "0000000000000000000000000000000000badbed", DateTimeOffset.Parse("01/10/2010")),
         },
         // How long to group histograms by (depends on your view requirements. Hint - if you want a month use 30.475 days)
         TimeSpan.FromDays(1),
