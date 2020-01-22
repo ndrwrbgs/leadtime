@@ -4,7 +4,7 @@ namespace LeadTime.Library.Core
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
+    using Accord.Statistics.Analysis;
     using Accord.Statistics.Distributions;
     using Accord.Statistics.Distributions.Fitting;
     using Accord.Statistics.Distributions.Univariate;
@@ -29,19 +29,28 @@ namespace LeadTime.Library.Core
                 o => o.dateRange,
                 o =>
                 {
+                    double[] observations = o.leadTimesInRange.Select(t => (double)t.Ticks).ToArray();
+                    //*/
                     var normal = new NormalDistribution();
 
                     normal.Fit(
-                        o.leadTimesInRange.Select(t => (double)t.Ticks).ToArray(),
+                        observations,
                         new NormalOptions
                         {
                             Regularization = 1e-6
                         });
+                    /*/
+                    var normal = new EmpiricalDistribution(
+                        observations);
+                    //*/
 
-                    //var normal = new EmpiricalDistribution(
-                    //    o.leadTimesInRange.Select(t => (double) t.Ticks).ToArray());
+                    var analysis = new DistributionAnalysis();
+                    analysis.Learn(observations);
+                    var mostLikely = analysis.GoodnessOfFit[0];
+                    var result = mostLikely.Distribution;
 
-                    return (IUnivariateDistribution)normal;
+                    // TODO: Unsafe cast, IFittable isn't necessarily IUnivariateDistribution
+                    return (IUnivariateDistribution)result;
                 });
 
             return dateRangeDistributions;

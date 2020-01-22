@@ -124,10 +124,11 @@ namespace LeadTimes.Test
                     {
                         var dateRange = dateRangeAndHistogram.Key;
                         var histogram = dateRangeAndHistogram.Value;
-                        
+
                         // // [1/21/2020 12:00:00 AM +00:00, 1/22/2020 12:00:00 AM +00:00): [11.16:13:19.7169758 - 11.16:13:19.7169758 - 11.16:13:19.7169758]
                         // Try to find the percentile
-                        var estimatedLocationOfPercentile = histogram.GetRange(0.43).Min;
+                        // BUG: Cannot use Quartiles or GetPercentile due to convergence of the single-sample item
+                        var estimatedLocationOfPercentile = 0 /* TODO */;
                             //FindPercentile(histogram, 0.43);
                         var realPercentile = histogram.DistributionFunction(estimatedLocationOfPercentile);
 
