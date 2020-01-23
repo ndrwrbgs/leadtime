@@ -120,17 +120,26 @@ namespace LeadTimes.Test
                         repository);
 
                     var orderedDateRanges = all.OrderBy(kvp => kvp.Key);
-                    foreach (var dateRangeAndHistogram in orderedDateRanges)
+                    foreach (var dateRangeAndDistribution in orderedDateRanges)
                     {
-                        var dateRange = dateRangeAndHistogram.Key;
-                        var histogram = dateRangeAndHistogram.Value;
+                        var dateRange = dateRangeAndDistribution.Key;
+                        var distribution = dateRangeAndDistribution.Value;
 
                         // // [1/21/2020 12:00:00 AM +00:00, 1/22/2020 12:00:00 AM +00:00): [11.16:13:19.7169758 - 11.16:13:19.7169758 - 11.16:13:19.7169758]
                         // Try to find the percentile
                         // BUG: Cannot use Quartiles or GetPercentile due to convergence of the single-sample item
-                        var estimatedLocationOfPercentile = 0 /* TODO */;
-                            //FindPercentile(histogram, 0.43);
-                        var realPercentile = histogram.DistributionFunction(estimatedLocationOfPercentile);
+                        double estimatedLocationOfPercentile;
+                        try
+                        {
+                            estimatedLocationOfPercentile = distribution.GetRange(0.25).Min;
+                        }
+                        catch
+                        {
+                            estimatedLocationOfPercentile = 0.0;
+                        }
+
+                        //FindPercentile(distribution, 0.43);
+                        var realPercentile = distribution.DistributionFunction(estimatedLocationOfPercentile);
 
                         Console.WriteLine($"{dateRange}: {estimatedLocationOfPercentile} - {realPercentile}");
                     }

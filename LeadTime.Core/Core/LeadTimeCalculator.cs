@@ -30,27 +30,24 @@ namespace LeadTime.Library.Core
                 o =>
                 {
                     double[] observations = o.leadTimesInRange.Select(t => (double)t.Ticks).ToArray();
-                    //*/
-                    var normal = new NormalDistribution();
-
-                    normal.Fit(
-                        observations,
-                        new NormalOptions
-                        {
-                            Regularization = 1e-6
-                        });
-                    /*/
-                    var normal = new EmpiricalDistribution(
-                        observations);
-                    //*/
 
                     var analysis = new DistributionAnalysis();
                     analysis.Learn(observations);
-                    var mostLikely = analysis.GoodnessOfFit[0];
-                    var result = mostLikely.Distribution;
 
-                    // TODO: Unsafe cast, IFittable isn't necessarily IUnivariateDistribution
-                    return (IUnivariateDistribution)result;
+                    var matchingOutputType = analysis.GoodnessOfFit
+                        // Since type doesn't expose IEnumerable, forces it to (using old C# tricks)
+                        .OfType<GoodnessOfFit>()
+                        // Ha. haha. hahaha.... GoodnessOfFit enumerates the items NOT in sorted order
+                        .OrderBy(gof => gof.Index)
+                        .Select(gof => gof.Distribution)
+                        // IFittable is the type of Distribution, but we must return IUnivariateDistribution
+                        .OfType<IUnivariateDistribution>()
+                        // GoodnessOfFit is a descending-in-likelihood collection
+                        .First();
+
+                    // TODO: Enforce a minimum likelihood or error out
+
+                    return matchingOutputType;
                 });
 
             return dateRangeDistributions;
