@@ -3,9 +3,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LeadTimes.Test
 {
+    using System.CodeDom;
     using System.Collections.Generic;
     using System.Linq;
 
+    using Accord;
+    using Accord.Statistics.Distributions;
+    using Accord.Statistics.Distributions.Univariate;
     using LeadTime.Library;
     using LeadTime.Library.Core.DataTypes;
     using LeadTime.Library.Core.Util;
@@ -19,20 +23,6 @@ namespace LeadTimes.Test
     [TestClass]
     public class UnitTest1
     {
-        [TestMethod]
-        public void HistogramTest()
-        {
-            var histogram = new TimeSpanHistogram(
-                new TimeSpan[]
-                {
-                    TimeSpan.Zero,
-                    TimeSpan.MaxValue
-                });
-
-            Assert.AreEqual(TimeSpan.Zero, histogram.GetPercentile(0));
-            Assert.AreEqual(TimeSpan.MaxValue, histogram.GetPercentile(1));
-        }
-
         [TestClass]
         public class DateSnapTests
         {
@@ -131,15 +121,64 @@ namespace LeadTimes.Test
                         repository);
 
                     var orderedDateRanges = all.OrderBy(kvp => kvp.Key);
-                    foreach (var dateRangeAndHistogram in orderedDateRanges)
+                    foreach (var dateRangeAndDistribution in orderedDateRanges)
                     {
-                        var dateRange = dateRangeAndHistogram.Key;
-                        var histogram = dateRangeAndHistogram.Value;
+                        var dateRange = dateRangeAndDistribution.Key;
+                        var distribution = dateRangeAndDistribution.Value;
 
                         // // [1/21/2020 12:00:00 AM +00:00, 1/22/2020 12:00:00 AM +00:00): [11.16:13:19.7169758 - 11.16:13:19.7169758 - 11.16:13:19.7169758]
-                        Console.WriteLine($"{dateRange}: {histogram}");
+                        // Try to find the percentile
+                        // BUG: Cannot use Quartiles or GetPercentile due to convergence of the single-sample item
+                        double estimatedLocationOfPercentile;
+                        try
+                        {
+                            estimatedLocationOfPercentile = distribution.GetRange(0.25).Min;
+                        }
+                        catch
+                        {
+                            estimatedLocationOfPercentile = 0.0;
+                        }
+
+                        //FindPercentile(distribution, 0.43);
+                        var realPercentile = distribution.DistributionFunction(estimatedLocationOfPercentile);
+
+                        Console.WriteLine($"{dateRange}: {estimatedLocationOfPercentile} - {realPercentile}");
                     }
                 }
+            }
+
+            private static double FindPercentile(IDistribution source, double percentile)
+            {
+                double currentMin = double.MinValue;
+                double currentMax = double.MaxValue;
+
+                double desiredAccuracy = 0.01;
+                int maxIterations = 2000;
+
+                double currentGuess = double.NaN;
+
+                for (int iteration = 0; iteration < maxIterations; iteration++)
+                {
+                    currentGuess = currentMin / 2.0 + currentMax / 2.0;
+
+                    var currentPercentile = source.DistributionFunction(currentGuess);
+                    var error = Math.Abs(currentPercentile - percentile);
+                    if (error < desiredAccuracy)
+                    {
+                        return currentGuess;
+                    }
+
+                    if (currentPercentile < percentile)
+                    {
+                        currentMin = currentGuess;
+                    }
+                    else // >
+                    {
+                        currentMax = currentGuess;
+                    }
+                }
+
+                return currentGuess;
             }
         }
     }
