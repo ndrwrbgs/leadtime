@@ -5,6 +5,7 @@
     using Accord.Statistics.Distributions;
     using Accord.Statistics.Distributions.Univariate;
 
+    using LeadTime.Core.Core;
     using LeadTime.Library.Core;
     using LeadTime.Library.Core.DataTypes;
     using LeadTime.Library.Git.DataTypes;
@@ -17,7 +18,8 @@
             IEnumerable<(GitCommitHash changeHash, DateTimeOffset shipDate)> individuallyShippedChanges,
             TimeSpan rangeDuration,
             DateTimeOffset snapDateRangesTo,
-            IRepository repository)
+            IRepository repository,
+            LeadTimeMode leadTimeMode = LeadTimeMode.ReportCommitAtShipDate)
         {
             var inAndOutDates = GitInAndOutDateFinder.GetInAndOutDates(
                 individuallyShippedChanges,
@@ -26,7 +28,8 @@
             var leadTimes = LeadTimeCalculator.Calculate(
                 inAndOutDates,
                 rangeDuration,
-                snapDateRangesTo);
+                snapDateRangesTo,
+                leadTimeMode);
 
             return leadTimes;
         }
