@@ -9,8 +9,8 @@
     <PackageIconUrl>https://github.com/ndrwrbgs/leadtime/blob/master/package_icon.png</PackageIconUrl>
     <PackageIcon>package_icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/ndrwrbgs/leadtime</RepositoryUrl>
-    <Version>2.0.0</Version>
-    <PackageReleaseNotes>Update to expose an Accord.NET Distribution</PackageReleaseNotes>
+    <Version>3.0.0</Version>
+    <PackageReleaseNotes>Add leadTimeMode to support reporting at commit date</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

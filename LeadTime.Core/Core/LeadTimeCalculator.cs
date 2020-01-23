@@ -6,24 +6,22 @@ namespace LeadTime.Library.Core
     using System.Linq;
     using Accord.Statistics.Analysis;
     using Accord.Statistics.Distributions;
-    using Accord.Statistics.Distributions.Fitting;
-    using Accord.Statistics.Distributions.Univariate;
+
+    using LeadTime.Core.Core;
     using LeadTime.Library.Core.DataTypes;
     using LeadTime.Library.Core.Util;
 
-    /// <summary>
-    /// 
-    /// </summary>
     public static class LeadTimeCalculator
     {
         public static IDictionary<DateRange, IUnivariateDistribution> Calculate(
             IEnumerable<(DateTimeOffset inDate, DateTimeOffset outDate)> inAndOutDates,
             TimeSpan rangeDuration,
-            DateTimeOffset snapDateRangesTo)
+            DateTimeOffset snapDateRangesTo,
+            LeadTimeMode leadTimeMode = LeadTimeMode.ReportCommitAtShipDate)
         {
             var leadTimes = GetLeadTimes(inAndOutDates);
 
-            var dateRangeLeadTimes = GroupOverTimeRanges(leadTimes, rangeDuration, snapDateRangesTo);
+            var dateRangeLeadTimes = GroupOverTimeRanges(leadTimes, rangeDuration, snapDateRangesTo, leadTimeMode);
 
             var dateRangeDistributions = dateRangeLeadTimes.ToDictionary(
                 o => o.dateRange,
@@ -53,25 +51,37 @@ namespace LeadTime.Library.Core
             return dateRangeDistributions;
         }
 
-        private static IEnumerable<(DateTimeOffset outDate, TimeSpan leadTime)> GetLeadTimes(
+        private static IEnumerable<(DateTimeOffset outDate, DateTimeOffset inDate, TimeSpan leadTime)> GetLeadTimes(
             IEnumerable<(DateTimeOffset inDate, DateTimeOffset outDate)> inAndOutDates)
         {
             return inAndOutDates
-                .Select(o => (o.outDate, o.outDate - o.inDate));
+                .Select(o => (o.outDate, o.inDate, o.outDate - o.inDate));
         }
 
         private static IEnumerable<(DateRange dateRange, List<TimeSpan> leadTimesInRange)> GroupOverTimeRanges(
-            IEnumerable<(DateTimeOffset outDate, TimeSpan leadTime)> leadTimes,
+            IEnumerable<(DateTimeOffset outDate, DateTimeOffset inDate, TimeSpan leadTime)> leadTimes,
             TimeSpan rangeDuration,
-            DateTimeOffset snapDateRangesTo)
+            DateTimeOffset snapDateRangesTo,
+            LeadTimeMode leadTimeMode)
         {
-            var snappedToOutDates = ToDateRange.SnapToDateRanges(
+            var snappedToDates = ToDateRange.SnapToDateRanges(
                 leadTimes,
-                o => o.outDate,
+                o =>
+                {
+                    switch (leadTimeMode)
+                    {
+                        case LeadTimeMode.ReportCommitAtShipDate:
+                            return o.outDate;
+                        case LeadTimeMode.ReportCommitAtCommitDate:
+                            return o.inDate;
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(leadTimeMode), leadTimeMode, null);
+                    }
+                },
                 snapDateRangesTo,
                 rangeDuration);
 
-            return snappedToOutDates
+            return snappedToDates
                 .Select(
                     kvp =>
                     {
