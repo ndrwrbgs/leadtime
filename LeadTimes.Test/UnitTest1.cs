@@ -11,6 +11,7 @@ namespace LeadTimes.Test
     using Accord.Statistics.Distributions;
     using Accord.Statistics.Distributions.Univariate;
     using LeadTime.Library;
+    using LeadTime.Library.Core.DataTypes;
     using LeadTime.Library.Core.Util;
     using LeadTime.Library.Git;
     using LeadTime.Library.Git.DataTypes;
@@ -104,7 +105,7 @@ namespace LeadTimes.Test
         public class GitTests
         {
             [TestMethod]
-            //[Ignore("Dev box only")]
+            [Ignore("Dev box only")]
             public void ManualTesting()
             {
                 using (var repository = new Repository(@"c:\RAMDisk\Health"))
